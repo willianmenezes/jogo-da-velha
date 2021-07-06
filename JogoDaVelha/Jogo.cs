@@ -19,6 +19,7 @@ namespace JogoDaVelha
 
         public Jogo ImprimirJogo()
         {
+            Console.Clear();
             for (int i = 0; i < LINHAS; i++)
             {
                 for (int j = 0; j < COLUNAS; j++)
@@ -86,6 +87,29 @@ namespace JogoDaVelha
             Console.WriteLine($"Jogador  {jogador.Nome} escolha uma posição: \n[0,0] - [0,1] - [0,2] \n[1,0] - [1,1] - [1,2]\n[2,0] - [2,1] - [2,2] ");
         }
 
+        public bool VerificarVelha()
+        {
+            var pecasDefault = new List<Peca>();
+
+            for (int i = 0; i < LINHAS; i++)
+            {
+                for (int j = 0; j < COLUNAS; j++)
+                {
+                    if (Pecas[i, j].ToString() != "  -  ")
+                    {
+                        pecasDefault.Add(Pecas[i, j]);
+                    }
+                }
+            }
+
+            return pecasDefault.Count == (LINHAS * COLUNAS);
+        }
+
+        public bool VerificarVencedor()
+        {
+
+        }
+
         public void Jogar()
         {
             Console.Write("Nome do primeiro jogador: ");
@@ -100,7 +124,7 @@ namespace JogoDaVelha
 
             while (!final)
             {
-                Console.Clear();
+
                 ImprimirJogo();
 
                 if (rodada)
@@ -121,6 +145,12 @@ namespace JogoDaVelha
                     }
                 }
 
+                if (VerificarVelha())
+                {
+                    final = true;
+                    ImprimirJogo();
+                    Console.WriteLine("Jogo empatado, boa sorte na proxima partida");
+                }
             }
         }
 
