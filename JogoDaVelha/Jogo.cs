@@ -64,9 +64,21 @@ namespace JogoDaVelha
             }
         }
 
-        public void ColocarPecaNaPosicao(int linha, int coluna, TipoPeca tipoPeca)
+        public bool PosicaoLivre(int linha, int coluna)
         {
-            Pecas[linha, coluna] = GerarPecaNaPosicao(linha, coluna, tipoPeca);
+            return Pecas[linha, coluna].ToString() == "  -  ";
+        }
+
+        public bool ColocarPecaNaPosicao(int linha, int coluna, TipoPeca tipoPeca)
+        {
+            var peca = GerarPecaNaPosicao(linha, coluna, tipoPeca);
+
+            var posicaoLivre = PosicaoLivre(linha, coluna);
+
+            if (!posicaoLivre) return false;
+
+            Pecas[linha, coluna] = peca;
+            return true;
         }
 
         public void ImprimirJogada(Jogador jogador)
@@ -84,27 +96,39 @@ namespace JogoDaVelha
             var nomeSegundoJogador = Console.ReadLine();
             var segundoJogador = new Jogador(nomeSegundoJogador, TipoPeca.Cruzado);
             var final = false;
+            var rodada = true;
 
             while (!final)
             {
                 Console.Clear();
-
-                ImprimirJogada(primeiroJogador);
-                var posicoesPrimeiroJogador = Console.ReadLine().Replace(" ", "").Split(",");
-
-                ColocarPecaNaPosicao(int.Parse(posicoesPrimeiroJogador[0]), int.Parse(posicoesPrimeiroJogador[1]), primeiroJogador.TipoPeca);
-
                 ImprimirJogo();
 
-                ImprimirJogada(segundoJogador);
-                var posicoesSegundoJogador = Console.ReadLine().Replace(" ", "").Split(",");
+                if (rodada)
+                {
+                    var resultadoJogada = RealizarJogada(primeiroJogador);
+                    if (resultadoJogada)
+                    {
+                        rodada = !rodada;
+                    }
 
-                ColocarPecaNaPosicao(int.Parse(posicoesSegundoJogador[0]), int.Parse(posicoesSegundoJogador[1]), segundoJogador.TipoPeca);
+                }
+                else
+                {
+                    var resultadoJogada = RealizarJogada(segundoJogador);
+                    if (resultadoJogada)
+                    {
+                        rodada = !rodada;
+                    }
+                }
 
-                ImprimirJogo();
-
-                final = true;
             }
+        }
+
+        private bool RealizarJogada(Jogador jogador)
+        {
+            ImprimirJogada(jogador);
+            var posicoesJogador = Console.ReadLine().Replace(" ", "").Split(",");
+            return ColocarPecaNaPosicao(int.Parse(posicoesJogador[0]), int.Parse(posicoesJogador[1]), jogador.TipoPeca);
         }
     }
 }
