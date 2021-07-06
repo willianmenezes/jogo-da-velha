@@ -6,10 +6,9 @@ namespace JogoDaVelha
     {
         static void Main(string[] args)
         {
-            new Jogo()
-            .CriarJogo()
-            .ImprimirJogo()
-            .Jogar();
+            var jogo = new Jogo();
+            jogo.CriarJogo();
+            jogo.Jogar();
 
             Console.ReadLine();
         }

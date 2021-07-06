@@ -26,5 +26,12 @@ namespace JogoDaVelha
         {
             return Imprimir();
         }
+
+        public override bool Equals(object obj)
+        {
+            var instance = obj as Peca;
+            if (instance == null) return false;
+            return instance.Linha == Linha && instance.Coluna == Coluna;
+        }
     }
 }
