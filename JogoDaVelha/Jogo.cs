@@ -95,7 +95,7 @@ namespace JogoDaVelha
             {
                 for (int j = 0; j < COLUNAS; j++)
                 {
-                    if (Pecas[i, j].ToString() != "  -  ")
+                    if (!Pecas[i, j].Equals(new Peca(0, 0)))
                     {
                         pecasDefault.Add(Pecas[i, j]);
                     }
@@ -105,9 +105,49 @@ namespace JogoDaVelha
             return pecasDefault.Count == (LINHAS * COLUNAS);
         }
 
+        public bool VerificarVencedorLinhas()
+        {
+            var resultado = false;
+            for (int i = 0; i < LINHAS; i++)
+            {
+                resultado = Pecas[i, 0].Equals(Pecas[i, 1]) && Pecas[i, 0].Equals(Pecas[i, 2]) && !Pecas[i, 0].Equals(new Peca(0, 0));
+
+                if (resultado)
+                {
+                    return resultado;
+                }
+            }
+
+            return resultado;
+        }
+
+        public bool VerificarVencedorColunas()
+        {
+            var resultado = false;
+            for (int i = 0; i < LINHAS; i++)
+            {
+                resultado = Pecas[0, i].Equals(Pecas[1, i]) && Pecas[0, i].Equals(Pecas[2, i]) && !Pecas[0, i].Equals(new Peca(0, 0));
+
+                if (resultado)
+                {
+                    return resultado;
+                }
+            }
+
+            return resultado;
+        }
+
+        public bool VerificarVencedorDiagonal()
+        {
+            var diagonalPrimaria = (Pecas[0, 0].Equals(Pecas[1, 1]) && Pecas[0, 0].Equals(Pecas[2, 2]) && !Pecas[1, 1].Equals(new Peca(0, 0))) == true ? true : false;
+            var diagonalSecundaria = (Pecas[2, 0].Equals(Pecas[1, 1]) && Pecas[2, 0].Equals(Pecas[0, 2]) && !Pecas[1, 1].Equals(new Peca(0, 0))) == true ? true : false;
+
+            return diagonalPrimaria || diagonalSecundaria;
+        }
+
         public bool VerificarVencedor()
         {
-
+            return VerificarVencedorLinhas() || VerificarVencedorColunas() || VerificarVencedorDiagonal();
         }
 
         public void Jogar()
@@ -150,6 +190,14 @@ namespace JogoDaVelha
                     final = true;
                     ImprimirJogo();
                     Console.WriteLine("Jogo empatado, boa sorte na proxima partida");
+                }
+
+                if (VerificarVencedor())
+                {
+                    var nomeVencedor = !rodada ? nomePrimeiroJogador : nomeSegundoJogador;
+                    final = true;
+                    ImprimirJogo();
+                    Console.WriteLine($"Final de jogo, o jogador {nomeVencedor} foi o vencedor");
                 }
             }
         }

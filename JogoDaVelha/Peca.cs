@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace JogoDaVelha
+﻿namespace JogoDaVelha
 {
     public class Peca
     {
@@ -25,6 +19,14 @@ namespace JogoDaVelha
         public override string ToString()
         {
             return Imprimir();
+        }
+        public override bool Equals(object obj)
+        {
+            var objeCompare = obj as Peca;
+            if (objeCompare == null)
+                return false;
+
+            return objeCompare.ToString() == this.ToString();
         }
     }
 }
