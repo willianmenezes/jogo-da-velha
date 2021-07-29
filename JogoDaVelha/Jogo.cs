@@ -41,9 +41,9 @@ namespace JogoDaVelha
         public Jogo CriarJogo()
         {
 
-            for (int i = 0; i < LINHAS; i++)
+            for (var i = 0; i < LINHAS; i++)
             {
-                for (int j = 0; j < COLUNAS; j++)
+                for (var j = 0; j < COLUNAS; j++)
                 {
                     Pecas[i, j] = new Peca(i, j);
                 }
@@ -54,15 +54,12 @@ namespace JogoDaVelha
 
         public Peca GerarPecaNaPosicao(int linha, int coluna, TipoPeca tipoPeca)
         {
-            switch (tipoPeca)
+            return tipoPeca switch
             {
-                case TipoPeca.Circulo:
-                    return new Circulo(linha, coluna);
-                case TipoPeca.Cruzado:
-                    return new Cruzado(linha, coluna);
-                default:
-                    return new Peca(linha, coluna);
-            }
+                TipoPeca.Circulo => new Circulo(linha, coluna),
+                TipoPeca.Cruzado => new Cruzado(linha, coluna),
+                _ => new Peca(linha, coluna)
+            };
         }
 
         public bool PosicaoLivre(int linha, int coluna)
@@ -91,9 +88,9 @@ namespace JogoDaVelha
         {
             var pecasDefault = new List<Peca>();
 
-            for (int i = 0; i < LINHAS; i++)
+            for (var i = 0; i < LINHAS; i++)
             {
-                for (int j = 0; j < COLUNAS; j++)
+                for (var j = 0; j < COLUNAS; j++)
                 {
                     if (!Pecas[i, j].Equals(new Peca(0, 0)))
                     {
@@ -108,17 +105,17 @@ namespace JogoDaVelha
         public bool VerificarVencedorLinhas()
         {
             var resultado = false;
-            for (int i = 0; i < LINHAS; i++)
+            for (var i = 0; i < LINHAS; i++)
             {
                 resultado = Pecas[i, 0].Equals(Pecas[i, 1]) && Pecas[i, 0].Equals(Pecas[i, 2]) && !Pecas[i, 0].Equals(new Peca(0, 0));
 
                 if (resultado)
                 {
-                    return resultado;
+                    return true;
                 }
             }
 
-            return resultado;
+            return false;
         }
 
         public bool VerificarVencedorColunas()
@@ -130,11 +127,11 @@ namespace JogoDaVelha
 
                 if (resultado)
                 {
-                    return resultado;
+                    return true;
                 }
             }
 
-            return resultado;
+            return false;
         }
 
         public bool VerificarVencedorDiagonal()
@@ -172,7 +169,7 @@ namespace JogoDaVelha
                     var resultadoJogada = RealizarJogada(primeiroJogador);
                     if (resultadoJogada)
                     {
-                        rodada = !rodada;
+                        rodada = false;
                     }
 
                 }
@@ -181,7 +178,7 @@ namespace JogoDaVelha
                     var resultadoJogada = RealizarJogada(segundoJogador);
                     if (resultadoJogada)
                     {
-                        rodada = !rodada;
+                        rodada = true;
                     }
                 }
 
